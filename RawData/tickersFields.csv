@@ -1,0 +1,11 @@
+Name,Field
+Ticker,Ticker
+Name,Short_Name
+Country,Country
+Currency, Crncy
+FreqPublication,Primary_Periodicity
+FreqDividned,Dvd_Freq
+EcoSecteur,Industry_Sector
+Secteur,GICS_Sector_Name
+Group,GICS_Industry_Group_Name
+Industrie,GICS_Industry_Name
