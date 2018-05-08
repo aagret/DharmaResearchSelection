@@ -38,6 +38,7 @@ source("R/Source/calcRating.R")
 source("R/Source/getStats.R")
 source("R/Source/calcGrade.R")
 source("R/Source/calcScoring.R")
+source("R/Source/changeNAtoZero.R")
 
 
 #########################
@@ -48,7 +49,7 @@ source("R/Source/calcScoring.R")
 
 # load indicators database
 load("TidyData/indicators.RData")
-#setkey(indicators, Ticker)
+setkey(indicators, Ticker)
 
 # load exisiting security database
 load("TidyData/securities.RData")

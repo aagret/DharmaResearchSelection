@@ -13,9 +13,8 @@ crit <- crit[complete.cases(crit)]
 ## calc indicators
 rating <- calcRating(indicators, crit)
 
-stats <- getStats(indicators) # rolling stats !!
-
-grade <- calcGrade(indicators, crit, stats) # adjust to avoid rolling stats OR?
+# stats <- getStats(indicators) # rolling stats !!
+# grade <- calcGrade(indicators, crit, stats) # adjust to avoid rolling stats OR?
 
 score <- calcScoring(indicators[securities], crit)
 

@@ -66,6 +66,8 @@ if (length(missingTic) > 0) {
     # merge and save  newData with exisiting database
     securities <- rbind(securities, newData)
     
+    setkey(securities, Ticker)
+    
     save(securities, file="TidyData/securities.RData")
 
 }
@@ -82,6 +84,8 @@ if (length(missingTic) > 0) {
     
     # merge and save indicators          
     indicators <- rbind(indicators, newData)
+    
+    setkey(indicators, Ticker)
     
     save(indicators, file="TidyData/indicators.RData")
 
@@ -101,6 +105,6 @@ cat(NULL, file="RawData/newTickers.csv")
 
 
 # check bloomberg data usage (max 250k/day)
-rowSums(newData[, lapply(.SD, function(x) length(unique(x)))][,-1:-2])
+# rowSums(newData[, lapply(.SD, function(x) length(unique(x)))][,-1:-2])
 
 
