@@ -62,9 +62,6 @@ newTic <- loadNewTickers("newTickers.csv")
 indicatorFields    <- fread("RawData/indicatorsFields.csv", sep=",")
 indicatorFields    <- indicatorFields$Field
 
-newFields <- fread("RawData/newFields.csv", sep=",")
-newFields <- newFields$Field
-
 tickerFields <- fread("RawData/tickersFields.csv", sep=",")
 tickerFields <- tickerFields$Field
 
