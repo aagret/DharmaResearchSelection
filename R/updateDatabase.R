@@ -35,22 +35,23 @@ if (length(missingDts) > 0) {
 
 
 # check if new fields are  requested
-newFields <- newFields[!newFields %in% indicatorFields]
+#newFields <- newFields[!newFields %in% indicatorFields]
+newFields <- indicatorFields[!indicatorFields %in% colnames(indicators)]
 
 if (length(newFields) > 0) {
 
-    tic <- unique(indicators$Ticker)
-    dts <- unique(indicators$Date)
+    tic <- as.character(unique(indicators$Ticker))
+    dts <- sort(unique(indicators$Date))
     
-    newData <- getBdhData(tic, newFfield, dts)
-
-    indicators <- rbind(indicators, newData)
+    newData <- getBdhData(tic, newFields, dts)
+    
+    setkey(newData, Ticker, Date)
+    setkey(indicators, Ticker, Date)
+    
+    indicators <- newData[indicators]
     
     save(indicators, file= "TidyData/indicators.RData")
-    
-    #empty newFields.csv
-    cat(NULL, file="RawData/newFields.csv")
-    
+
 }
 
 
@@ -85,14 +86,14 @@ if (length(missingTic) > 0) {
     # merge and save indicators          
     indicators <- rbind(indicators, newData)
     
-    setkey(indicators, Ticker)
+    setkey(indicators, Ticker, Date)
     
     save(indicators, file="TidyData/indicators.RData")
 
 }
 
 #empty newTickers.csv
-cat(NULL, file="RawData/newTickers.csv")
+#cat(NULL, file="RawData/newTickers.csv")
 
 
 
