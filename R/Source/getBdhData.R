@@ -17,7 +17,7 @@ getBdhData <- function(tic= missingTic, flds= fields, dts= weekDts)
                   flds, 
                   start.date= dts[1],
                   end.date= last(dts),
-                 # include.non.trading.days = TRUE,
+                  include.non.trading.days = TRUE,
                   options= opt,
                   verbose= TRUE)
         
@@ -26,12 +26,12 @@ getBdhData <- function(tic= missingTic, flds= fields, dts= weekDts)
         blpDisconnect(con)
         
         # set to data.frame
-        if (length(tic) > 1) db <- ldply(db, data.frame) else db <- cbind(missingTic, db)
+        if (length(tic) > 1) db <- ldply(db, data.frame) else db <- cbind(tic, db)
         
         colnames(db)[1:2] <- c("Ticker", "Date")
         
         # add calculated fields
-        db <- calculatedFields(db)
+        if(length(db$T12M_NET_CAPITAL_STOCK) > 0) db <- calculatedFields(db)
         
         setDT(db, key= c("Ticker", "Date"))
         
