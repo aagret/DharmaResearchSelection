@@ -1,10 +1,9 @@
 
 ## calc rating
 calcRating <- function(db= database, crit= criteria) {
-    
-    
-    fix <- db[,1:2]
-    db  <- db[,-1:-2]
+
+    fix <- db[,1:11]
+    db  <- db[,-1:-11]
     
     for (fld in colnames(db)){
         
@@ -20,14 +19,14 @@ calcRating <- function(db= database, crit= criteria) {
                                 crit[Field == fld, Weight],
                                 0))
             
-            if(!exists("rating")) rating <- nr else rating <- cbind(rating, nr)
+            if(!exists("res")) res <- nr else res <- cbind(res, nr)
         }
         
     }
     
-    rating <- cbind(fix, "Rating"=rowSums(rating, na.rm= TRUE), rating)
+    res <- cbind(fix, "Rating"=rowSums(res, na.rm= TRUE), res)
     
-    rating[, Rating:= max(Rating) + 1 - Rating]
+    res[, Rating:= max(Rating) + 1 - Rating]
     
 }
 
