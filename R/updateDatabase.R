@@ -4,46 +4,45 @@
 ############ MAIN SCRIPT
 ####
 
+# fix Bloomberg daily limit
+blpMax = 200000
 
 # define dates
-today        <- Sys.Date()
-endLastWeek  <- floor_date(today, "week")  - 2
-endLastMonth <- floor_date(today ,"month") - 1
+dts <- getDates()
 
-### create date range to use
-startDt <- as.Date("2013-03-01")
-weekDts <- seq.Date(startDt , endLastWeek, by= "1 week")
-weekDts <- seq.Date(startDt , as.Date("2018-04-30"), by= "1 week")
-#mthDts <- seq.Date(startDt , today, by= "1 month") - 1
-#allDts <- unique(c(weekDts, mthDts))
+# check if new dates indicators requested ####
+missingDts <- dts$weekDts[!dts$weekDts %in% unique(indicators$Date)]
 
+if (length(missingDts)) {
 
-# check if new dates indicators requested
-missingDts <- weekDts[!weekDts %in% unique(indicators$Date)]
-
-if (length(missingDts) > 0) {
-
-    tic     <- unique(indicators$Ticker)
+    tic  <- as.character(unique(indicators$Ticker))
+    flds <- colnames(indicators[, -c("Ticker","Date","T12_TOTAL_DISTRIBUTION_YIELD")])
     
-    newData <- getBdhData(tic, indicatorFields, missingDts)
-    
-    indicators <- rbind(indicators, newData)
-    
-    save(indicators, file= "TidyData/indicators.RData")
+    if (isBlpOK(tic, flds, missingDts)) {
+        
+        newData <- getBdhData(tic, flds, missingDts)
+        
+        indicators <- unique(rbind(indicators, newData, fill= TRUE))
+        
+        save(indicators, file= "TidyData/indicators.RData")
+        
+    }
     
 }
 
 
-# check if new fields are  requested
+
+# check if new fields are  requested ####
 #newFields <- newFields[!newFields %in% indicatorFields]
-newFields <- indicatorFields[!indicatorFields %in% colnames(indicators)]
+newFields <- indicatorFields$Field[!indicatorFields$Field %in% colnames(indicators)]
 
 if (length(newFields) > 0) {
 
-    tic <- as.character(unique(indicators$Ticker))
-    dts <- sort(unique(indicators$Date))
+    tic  <- as.character(unique(indicators$Ticker))
+    flds <- as.character(newFields)
+    dts  <- sort(unique(indicators$Date))
     
-    newData <- getBdhData(tic, newFields, dts)
+    if (isBlpOK(tic, newFields)) newData <- getBdhData(tic, flds, dts)
     
     setkey(newData, Ticker, Date)
     setkey(indicators, Ticker, Date)
@@ -55,39 +54,34 @@ if (length(newFields) > 0) {
 }
 
 
-# check if newTickers missing in Securities Database
+# check if newTickers missing in Securities Database ####
 missingTic <- newTic[!Ticker %in% securities$Ticker, Ticker]
+missingTic <- c(missingTic, 
+                securities$Ticker[!securities$Ticker %in% indicators$Ticker])
 missingTic <- as.character(missingTic)
 
 if (length(missingTic) > 0) {
+    
+    flds <- colnames(securities)[-1]
     
     # complete securities datas
-    newData <- getBdpData(missingTic, tickerFields)
+    newData <- getBdpData(missingTic, flds)
 
     # merge and save  newData with exisiting database
-    securities <- rbind(securities, newData)
-    
-    setkey(securities, Ticker)
-    
+    securities <- unique(rbind(securities, newData, fill= TRUE))
+
     save(securities, file="TidyData/securities.RData")
 
-}
-
-
-# check if newTickers missing in Indicators database
-missingTic <- newTic[!Ticker %in% indicators$Ticker, Ticker]
-missingTic <- as.character(missingTic)
-
-if (length(missingTic) > 0) {
-    
     # complere indicators database
-    newData <- getBdhData(missingTic,indicatorFields, weekDts)
+    
+    flds <- colnames(indicators)[-c(1,2,27)]
+    dts  <- sort(unique(indicators$Date))
+    
+    newData <- getBdhData(missingTic,flds, dts)
     
     # merge and save indicators          
-    indicators <- rbind(indicators, newData)
-    
-    setkey(indicators, Ticker, Date)
-    
+    indicators <- unique(rbind(indicators, newData, fill= TRUE))
+
     save(indicators, file="TidyData/indicators.RData")
 
 }
@@ -95,7 +89,20 @@ if (length(missingTic) > 0) {
 #empty newTickers.csv
 #cat(NULL, file="RawData/newTickers.csv")
 
+# carry over last observation
 
+    # merge all 
+    setkey(indicators, Ticker, Date)
+    setkey(securities, Ticker)
+    database <- securities[indicators]
+
+    # replace NA by previous value
+    database <- database[, lapply(.SD, function(x) na.locf(x, na.rm= FALSE)), by= Ticker]
+
+    # add calculated fields
+    database <- calculatedFields(database)
+    
+    save(database, file="TidyData/database.RData")
 
 ####
 ############ END OF SCRIPT
