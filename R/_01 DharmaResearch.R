@@ -30,6 +30,8 @@ library(xlsx)
 #############################
 
 ### load Functions ###
+source("R/Source/getDates.R")
+source("R/Source/isBlpOK.R")
 source("R/Source/loadNewTickers.R")
 source("R/Source/getBdpData.R")
 source("R/Source/getBdhData.R")
@@ -39,6 +41,7 @@ source("R/Source/getStats.R")
 source("R/Source/calcGrade.R")
 source("R/Source/calcScoring.R")
 source("R/Source/changeNAtoZero.R")
+source("R/Source/getSummary.R")
 
 
 #########################
@@ -49,22 +52,20 @@ source("R/Source/changeNAtoZero.R")
 
 # load indicators database
 load("TidyData/indicators.RData")
-setkey(indicators, Ticker)
+setDT(indicators, key= c("Ticker", "Date"))
 
 # load exisiting security database
 load("TidyData/securities.RData")
-setkey(securities, Ticker)
+setDT(securities, key= "Ticker")
+
+database <- securities[indicators]
+
 
 # load new Tickers
 newTic <- loadNewTickers("newTickers.csv")
 
-# load fields
-indicatorFields    <- fread("RawData/indicatorsFields.csv", sep=",")
-indicatorFields    <- indicatorFields$Field
-
-tickerFields <- fread("RawData/tickersFields.csv", sep=",")
-tickerFields <- tickerFields$Field
-
+#load fields datas
+indicatorFields <- read.csv("RawData/indicatorsFields.csv")
 
 ###############################
 ########  MAin Script  ########
