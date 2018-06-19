@@ -16,7 +16,18 @@ calculatedFields <- function(db= database) {
         db[is.na(db$T12_TOTAL_DISTRIBUTION_YIELD),"EQY_DVD_YLD_12M"]
 
 
-               
+     # Price to Book value
+    db$BOOK_TO_PRICE <- db$BOOK_VAL_PER_SH / db$PX_LAST
+    
+    # FCF Yield
+    db$FCF_YIELD <- db$TRAIL_12M_FREE_CASH_FLOW_PER_SH / db$PX_LAST
+    
+    # Sales to Price
+    db$SALES_TO_PRICE <- db$TRAIL_12M_SALES_PER_SH / db$PX_LAST
+    
+    # Ebitda to Price
+    db$EBITDA_TO_PRICE <- db$TRAIL_12M_EBITDA / db$PX_LAST
+    
 
 
 
