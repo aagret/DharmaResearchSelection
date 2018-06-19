@@ -18,11 +18,11 @@ library(xlsx)
 
 
 #### set working directory ####
-# codeDir <- "/home/artha/R-Projects/DharmaResearchSelection/"
+codeDir <- "m:/Alexandre/R-Projects/DharmaResearchSelection/"
+#codeDir <- "/home/artha/R-Projects/DharmaResearchSelection/"
 # 
 # workDir   <- "/home/artha/R-Projects/DharmaResearchSelection/"
 # setwd(workDir)
-
 
 
 #############################
@@ -78,6 +78,8 @@ source(paste0(codeDir, "R/updateDatabase.R"))
 
 # compute ratings
 source(paste0(codeDir, "R/computeRatings.R"))
+
+
 
 
 #######################
