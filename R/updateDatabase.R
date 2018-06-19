@@ -42,7 +42,7 @@ if (length(newFields) > 0) {
     flds <- as.character(newFields)
     dts  <- sort(unique(indicators$Date))
     
-    if (isBlpOK(tic, newFields)) newData <- getBdhData(tic, flds, dts)
+    if (isBlpOK(tic, flds, dts)) newData <- getBdhData(tic, flds, dts)
     
     setkey(newData, Ticker, Date)
     setkey(indicators, Ticker, Date)

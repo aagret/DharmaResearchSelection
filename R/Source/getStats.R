@@ -8,7 +8,7 @@ getStats <- function(db= database) {
     res <- db[, lapply(.SD, summary), .SDcols=colNum, by= Date]
 
     res <- cbind("Name"=c("Min.", "1st Qu.", "Median", "Mean",
-                        "3rd Qu.", "Max.", "NA's"),
+                          "3rd Qu.", "Max.", "NA's"),
                  res)
     
     res <- res[Name != "NA's",]
