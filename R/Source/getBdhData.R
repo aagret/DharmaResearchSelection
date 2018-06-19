@@ -63,8 +63,7 @@ getBdhData <- function(tic= missingTic, flds= fields, dts= weekDts)
         
         blpDisconnect(con)
         
-        if (exists("db_d")) db <- db_d else db <- NULL
-        if (exists("db_f")) db <- merge(db, db_f, by= c(".id", "date"), all=TRUE)
+        if (exists("db_d")) db <- merge(db, db_f, by= c(".id", "date"), all=TRUE) else db <- db_f
         
         db$X..i.. <- NULL
         
