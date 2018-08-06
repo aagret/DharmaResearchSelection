@@ -56,8 +56,8 @@ if (length(newFields) > 0) {
 
 # check if newTickers missing in Securities Database ####
 missingTic <- newTic[!Ticker %in% securities$Ticker, Ticker]
-missingTic <- c(missingTic, 
-                securities$Ticker[!securities$Ticker %in% indicators$Ticker])
+#missingTic <- c(missingTic, 
+#                securities$Ticker[!securities$Ticker %in% indicators$Ticker])
 missingTic <- as.character(missingTic)
 
 if (length(missingTic) > 0) {

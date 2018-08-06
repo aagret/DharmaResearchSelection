@@ -42,6 +42,7 @@ source("R/Source/calcGrade.R")
 source("R/Source/calcScoring.R")
 source("R/Source/changeNAtoZero.R")
 source("R/Source/getSummary.R")
+source("R/Source/getStyle.R")
 
 
 #########################
@@ -60,9 +61,11 @@ setDT(securities, key= "Ticker")
 
 database <- securities[indicators]
 
+# check exisiting tickers status (opa, change ticker etc...)
+source("R/Source/checkTickerStatus.R")
 
 # load new Tickers
-newTic <- loadNewTickers("newTickers.csv")
+newTic <- unique(loadNewTickers("newTickers.csv"))
 
 #load fields datas
 indicatorFields <- read.csv("RawData/indicatorsFields.csv")
