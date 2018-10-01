@@ -24,7 +24,7 @@ getBdhData <- function(tic= missingTic, flds= fields, dts= weekDts)
                         as.character(flds$D), 
                         start.date= dts[1],
                         end.date= last(dts),
-                        include.non.trading.days = TRUE,
+                        include.non.trading.days = FALSE,
                         options= opt,
                         verbose= TRUE)
             
@@ -50,7 +50,7 @@ getBdhData <- function(tic= missingTic, flds= fields, dts= weekDts)
                                                 as.character(flds$F), 
                                                 start.date= dts[1],
                                                 end.date= last(dts),
-                                                include.non.trading.days = TRUE,
+                                                include.non.trading.days = FALSE,
                                                 options= opt,
                                                 verbose= TRUE))
             

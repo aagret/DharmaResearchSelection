@@ -22,9 +22,10 @@ ratingChange <- function(db= rating, n= period, t= tolerance) {
     
    # r <- list(r[grepl(" US ", Ticker),], r[!grepl(" US ", Ticker),])
     
-    list(
+    list("US"=
         split(r[grepl(" US ", Ticker),  .(Chg, Ticker, Short_Name, OldDt, OldRat, NewRat)], 
           by= "Chg"),
+        "EU"=
         split(r[!grepl(" US ", Ticker), .(Chg, Ticker, Short_Name, OldDt, OldRat, NewRat)], 
               by= "Chg"))
     
@@ -32,5 +33,8 @@ ratingChange <- function(db= rating, n= period, t= tolerance) {
  
 
 
-ratingChange(rating, 4, 1.5)  
-hist(r$Rating)
+r <- ratingChange(rating, 3, 1)  
+s <- calcScoring(database, crit)
+s <- ratingChange(s, 3, 1)
+
+hist(rating)
