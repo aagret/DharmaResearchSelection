@@ -59,7 +59,8 @@ setDT(indicators, key= c("Ticker", "Date"))
 load("TidyData/securities.RData")
 setDT(securities, key= "Ticker")
 
-database <- securities[indicators]
+load("TidyData/database.RData")
+setDT(database, key= "Ticker")
 
 # check exisiting tickers status (opa, change ticker etc...)
 source("R/Source/checkTickerStatus.R")
